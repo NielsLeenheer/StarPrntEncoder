@@ -1,6 +1,6 @@
 {
-  "name": "star-print-encoder",
-  "version": "1.0.1",
+  "name": "star-prnt-encoder",
+  "version": "1.0.2",
   "description": "Create a set of commands that can be send to any receipt printer that supports ESC/POS",
   "main": "src/star-prnt-encoder.js",
   "scripts": {
