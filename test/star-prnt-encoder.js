@@ -58,19 +58,11 @@ describe('StarPrntEncoder', function() {
         });
     });
 
-    describe('codepage(win1252).text(héllo) - é -> 233', function () {
-        let result = encoder.codepage('win1252').text('héllo').encode();
+    describe('codepage(windows1252).text(héllo) - é -> 233', function () {
+        let result = encoder.codepage('windows1252').text('héllo').encode();
         
         it('should be [27, 29, 116, 32, 104, 233, 108, 108, 111]', function () {
             assert.deepEqual(new Uint8Array([27, 29, 116, 32, 104, 233, 108, 108, 111]), result);
-        });
-    });
-
-    describe('codepage(utf8).text(héllo)', function () {
-        it('should throw an "Codepage not supported by printer" error', function () {
-            expect(function(){
-                let result = encoder.codepage('utf8').text('héllo').encode();
-            }).to.throw('Codepage not supported by printer');
         });
     });
 

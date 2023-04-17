@@ -1,9 +1,32 @@
-const iconv = require('iconv-lite');
 const linewrap = require('linewrap');
 const {createCanvas} = require('canvas');
 const Dither = require('canvas-dither');
 const Flatten = require('canvas-flatten');
+const CodepageEncoder = require('codepage-encoder');
 
+
+const codepageMappings = {
+  star: {
+    'cp437': 0x01,
+    'cp858': 0x04,
+    'cp852': 0x05,
+    'cp860': 0x06,
+    'cp861': 0x07,
+    'cp863': 0x08,
+    'cp865': 0x09,
+    'cp866': 0x0a,
+    'cp855': 0x0b,
+    'cp857': 0x0c,
+    'cp862': 0x0d,
+    'cp864': 0x0e,
+    'cp737': 0x0f,
+    'cp869': 0x11,
+    'cp874': 0x14,
+    'windows1252': 0x20,
+    'windows1250': 0x21,
+    'windows1251': 0x22,
+  },
+};
 
 /**
  * Create a byte stream based on commands for ESC/POS printers
@@ -12,20 +35,31 @@ class StarPrntEncoder {
   /**
      * Create a new object
      *
+     * @param  {object}   options   Object containing configuration options
     */
-  constructor() {
-    this._reset();
+  constructor(options) {
+    this._reset(options);
   }
 
   /**
      * Reset the state of the object
      *
+     * @param  {object}   options   Object containing configuration options
     */
-  _reset() {
+  _reset(options) {
+    this._options = Object.assign({
+      codepageMapping: 'star',
+      codepageCandidates: [
+        'cp437', 'cp858', 'cp860', 'cp861', 'cp863', 'cp865',
+        'cp852', 'cp857', 'cp855', 'cp866', 'cp869',
+      ],
+    }, options);
+
     this._buffer = [];
     this._codepage = 'ascii';
 
     this._state = {
+      'codepage': 0,
       'bold': false,
       'underline': false,
     };
@@ -39,7 +73,37 @@ class StarPrntEncoder {
      *
     */
   _encode(value) {
-    return iconv.encode(value, this._codepage);
+    if (this._codepage != 'auto') {
+      return CodepageEncoder.encode(value, this._codepage);
+    }
+
+    let codepages;
+
+    if (typeof this._options.codepageMapping == 'string') {
+      codepages = codepageMappings[this._options.codepageMapping];
+    } else {
+      codepages = this._options.codepageMapping;
+    }
+
+    const fragments = CodepageEncoder.autoEncode(value, this._options.codepageCandidates);
+
+    let length = 0;
+    for (let f = 0; f < fragments.length; f++) {
+      length += 3 + fragments[f].bytes.byteLength;
+    }
+
+    const buffer = new Uint8Array(length);
+    let i = 0;
+
+    for (let f = 0; f < fragments.length; f++) {
+      buffer.set([0x1b, 0x74, codepages[fragments[f].codepage]], i);
+      buffer.set(fragments[f].bytes, i + 3);
+      i += 3 + fragments[f].bytes.byteLength;
+
+      this._state.codepage = codepages[fragments[f].codepage];
+    }
+
+    return buffer;
   }
 
   /**
@@ -50,6 +114,24 @@ class StarPrntEncoder {
     */
   _queue(value) {
     value.forEach((item) => this._buffer.push(item));
+  }
+
+  /**
+     * Get code page identifier for the specified code page and mapping
+     *
+     * @param  {string}   codepage  Required code page
+     * @return {number}             Identifier for the current printer according to the specified mapping
+    */
+  _getCodepageIdentifier(codepage) {
+    let codepages;
+
+    if (typeof this._options.codepageMapping == 'string') {
+      codepages = codepageMappings[this._options.codepageMapping];
+    } else {
+      codepages = this._options.codepageMapping;
+    }
+
+    return codepages[codepage];
   }
 
   /**
@@ -69,50 +151,31 @@ class StarPrntEncoder {
   /**
      * Change the code page
      *
-     * @param  {string}   value  The codepage that we set the printer to
-     * @return {object}          Return the object, for easy chaining commands
+     * @param  {string}   codepage  The codepage that we set the printer to
+     * @return {object}             Return the object, for easy chaining commands
      *
      */
-  codepage(value) {
-    const codepages = {
-      'cp437': 0x01,
-      'cp858': 0x04,
-      'cp852': 0x05,
-      'cp860': 0x06,
-      'cp861': 0x07,
-      'cp863': 0x08,
-      'cp865': 0x09,
-      'cp866': 0x0a,
-      'cp855': 0x0b,
-      'cp857': 0x0c,
-      'cp862': 0x0d,
-      'cp864': 0x0e,
-      'cp737': 0x0f,
-      'cp869': 0x11,
-      'windows874': 0x14,
-      'windows1252': 0x20,
-      'windows1250': 0x21,
-      'windows1251': 0x22,
-    };
+  codepage(codepage) {
+    if (codepage === 'auto') {
+      this._codepage = codepage;
+      return this;
+    }
 
-    let codepage;
-
-    if (!iconv.encodingExists(value)) {
+    if (!CodepageEncoder.supports(codepage)) {
       throw new Error('Unknown codepage');
     }
 
-    if (value in iconv.encodings) {
-      if (typeof iconv.encodings[value] === 'string') {
-        codepage = iconv.encodings[value];
-      } else {
-        codepage = value;
-      }
+    let codepages;
+
+    if (typeof this._options.codepageMapping == 'string') {
+      codepages = codepageMappings[this._options.codepageMapping];
     } else {
-      throw new Error('Unknown codepage');
+      codepages = this._options.codepageMapping;
     }
 
     if (typeof codepages[codepage] !== 'undefined') {
       this._codepage = codepage;
+      this._state.codepage = codepages[codepage];
 
       this._queue([
         0x1b, 0x1d, 0x74, codepages[codepage],
@@ -313,7 +376,7 @@ class StarPrntEncoder {
     };
 
     if (symbology in symbologies) {
-      const bytes = iconv.encode(value, 'ascii');
+      const bytes = CodepageEncoder.encode(value, 'ascii');
 
       this._queue([
         0x1b, 0x62,
@@ -404,7 +467,7 @@ class StarPrntEncoder {
 
     /* Data */
 
-    const bytes = iconv.encode(value, 'iso88591');
+    const bytes = CodepageEncoder.encode(value, 'iso88591');
     const length = bytes.length; // + 3;
 
     this._queue([

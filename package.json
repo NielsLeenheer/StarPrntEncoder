@@ -40,7 +40,7 @@
     "canvas": "^2.6.0",
     "canvas-dither": "^1.0.0",
     "canvas-flatten": "^1.0.0",
-    "iconv-lite": "^0.6.2",
+    "codepage-encoder": "^2.0.0",
     "linewrap": "^0.2.1"
   }
 }
