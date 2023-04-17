@@ -46,8 +46,8 @@ If you don't specify a code page, it will assume you want to print only ASCII ch
     let result = encoder
         .codepage('windows1251')
         .text('Iñtërnâtiônàlizætiøn')
-        .codepage('cp936')
-        .text('简体中文')
+        .codepage('cp874')
+        .text('กำลังทดสอบ')
         .encode()
 
 The following code pages are supported: 
