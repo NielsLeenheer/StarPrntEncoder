@@ -207,6 +207,14 @@ describe('StarPrntEncoder', function() {
         });
     });
 
+    describe('pulse()', function () {
+        let result = encoder.pulse().encode();
+        
+        it('should be [ 27, 7, 20, 20, 7 ]', function () {
+            assert.deepEqual(new Uint8Array([ 27, 7, 20, 20, 7 ]), result);
+        });
+    });
+
     describe('cut()', function () {
         let result = encoder.cut().encode();
         
@@ -236,6 +244,14 @@ describe('StarPrntEncoder', function() {
         
         it('should be [ 28, 46 ]', function () {
             assert.deepEqual(new Uint8Array([ 28, 46 ]), result);
+        });
+    });
+
+    describe('codepage(auto).text(héψжł)', function () {
+        let result = encoder.codepage('auto').text('héψжł').encode();
+        
+        it('should be [27, 29, 116, 1, 104, 130, 27, 29, 116, 17, 246, 27, 29, 116, 11, 233, 27, 29, 116, 5, 136]', function () {
+            assert.deepEqual(new Uint8Array([27, 29, 116, 1, 104, 130, 27, 29, 116, 17, 246, 27, 29, 116, 11, 233, 27, 29, 116, 5, 136]), result);
         });
     });
 });
