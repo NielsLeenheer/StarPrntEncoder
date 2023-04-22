@@ -6,30 +6,17 @@ Before you use this library, you should also consider [ThermalPrinterEncoder](ht
 
 ## Usage
 
-In the browser you can load the `star-prnt-encoder.js` file located in the `dist` folder and instantiate a `StarPrntEncoder` object. 
+This package is compatible with browsers and Node. It provides bundled versions for direct use in the browser and can also be used as an input for your own bundler. And of course there are ES6 modules and CommonJS versions for use in Node.
 
-    <script src='dist/star-prnt-encoder.js></script>
+### Direct use in the browser
 
-    <script>
+The `dist` folder contains a UMD bundle that can be loaded using RequireJS or simply using a `<script>` tag. Alternatively there is a bundled ES6 module that can be imported.
 
-        let encoder = new StarPrntEncoder();
+For example: 
 
-        let result = encoder
-            .initialize()
-            .text('The quick brown fox jumps over the lazy dog')
-            .newline()
-            .qrcode('https://nielsleenheer.com')
-            .encode();
+In the browser you can import `StarPrntEncoder` from the `star-prnt-encoder.esm.js` file located in the `dist` folder.
 
-    </script>
-
-First, install the package using npm:
-
-    npm install star-prnt-encoder --save
-
-Then, require the package and use it like so:
-
-    let StarPrntEncoder = require('star-prnt-encoder');
+    import StarPrntEncoder from 'star-prnt-encoder.esm.js';
 
     let encoder = new StarPrntEncoder();
 
@@ -39,6 +26,48 @@ Then, require the package and use it like so:
         .newline()
         .qrcode('https://nielsleenheer.com')
         .encode();
+
+
+Alternatively you can load the `star-prnt-encoder.umd.js` file located in the `dist` folder and instantiate a `StarPrntEncoder` object. 
+
+    <script src='dist/star-prnt-encoder.umd.js'></script>
+
+    <script>
+
+        let encoder = new StarPrntEncoder();
+
+    </script>
+
+Or if you prefer a loader like RequireJS, you could use this:
+
+    requirejs([ 'dist/star-prnt-encoder.umd' ], StarPrntEncoder => {
+        let encoder = new StarPrntEncoder();
+    });
+
+### Using with Node (or in the browser, if you use your own bundler)
+
+If you want to use this libary, first install the package using npm:
+
+    npm install star-prnt-encoder --save
+
+If you prefer ES6 modules, then import `StarPrntEncoder` from `star-prnt-encoder` and use it like so:
+
+    import StarPrntEncoder from 'star-prnt-encoder';
+
+    let encoder = new StarPrntEncoder();
+
+    let result = encoder
+        .initialize()
+        .text('The quick brown fox jumps over the lazy dog')
+        .newline()
+        .qrcode('https://nielsleenheer.com')
+        .encode();
+
+Alternatively you could use the CommonJS way of doing things and require the package:
+
+    let StarPrntEncoder = require('star-prnt-encoder');
+
+    let encoder = new StarPrntEncoder();
 
 
 ## Options

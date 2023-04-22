@@ -1,5 +1,5 @@
 import linewrap from 'linewrap';
-import {createCanvas} from 'canvas';
+import { createCanvas } from 'canvas';
 import Dither from 'canvas-dither';
 import Flatten from 'canvas-flatten';
 import CodepageEncoder from 'codepage-encoder';
@@ -1179,4 +1179,4 @@ class StarPrntEncoder {
   }
 }
 
-export default StarPrntEncoder;
+export { StarPrntEncoder as default };

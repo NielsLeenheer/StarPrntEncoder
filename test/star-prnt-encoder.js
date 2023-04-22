@@ -1,10 +1,6 @@
-const StarPrntEncoder = require ('../src/star-prnt-encoder');
-const { createCanvas } = require('canvas');
-
-const chai = require('chai');  
-const assert = chai.assert;
-const expect = chai.expect;
-const should = chai.should();
+import StarPrntEncoder from '../src/star-prnt-encoder.js';
+import { createCanvas } from 'canvas';
+import { assert, expect } from 'chai';
 
 
 describe('StarPrntEncoder', function() {
@@ -219,7 +215,7 @@ describe('StarPrntEncoder', function() {
         let result = encoder.cut().encode();
         
         it('should be [ 27, 100, 00 ]', function () {
-            assert.deepEqual(new Uint8Array([ 27, 100, 00 ]), result);
+            assert.deepEqual(new Uint8Array([ 27, 100, 0 ]), result);
         });
     });
 
@@ -227,7 +223,7 @@ describe('StarPrntEncoder', function() {
         let result = encoder.cut('full').encode();
         
         it('should be [ 27, 100, 00 ]', function () {
-            assert.deepEqual(new Uint8Array([ 27, 100, 00 ]), result);
+            assert.deepEqual(new Uint8Array([ 27, 100, 0 ]), result);
         });
     });
 
@@ -235,7 +231,7 @@ describe('StarPrntEncoder', function() {
         let result = encoder.cut('partial').encode();
         
         it('should be [ 27, 100, 01 ]', function () {
-            assert.deepEqual(new Uint8Array([ 27, 100, 01 ]), result);
+            assert.deepEqual(new Uint8Array([ 27, 100, 1 ]), result);
         });
     });
 
