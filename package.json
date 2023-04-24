@@ -8,9 +8,7 @@
       "import": "./dist/star-prnt-encoder.esm.js",
       "require": "./dist/star-prnt-encoder.umd.js",
       "script": "./dist/star-prnt-encoder.umd.js"
-    },
-    "import": "./dist/star-prnt-encoder.mjs",
-    "require": "./dist/star-prnt-encoder.cjs"
+    }
   },
   "main": "dist/star-prnt-encoder.cjs",
   "module": "dist/star-prnt-encoder.mjs",
