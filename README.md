@@ -1,4 +1,4 @@
-# star-prnt-encoder
+# StarPrntEncoder
 
 Create a set of commands that can be send to any receipt printer that supports StarPRNT
 
