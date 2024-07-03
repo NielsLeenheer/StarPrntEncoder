@@ -39,25 +39,29 @@ class StarPrntEncoder {
      * @param  {object}   options   Object containing configuration options
     */
   constructor(options) {
-    this._options = Object.assign({
-      width: null,
-      embedded: false,
-      wordWrap: true,
-      autoFlush: true,
-      codepageMapping: 'star',
-      codepageCandidates: [
-        'cp437', 'cp858', 'cp860', 'cp861', 'cp863', 'cp865',
-        'cp852', 'cp857', 'cp855', 'cp866', 'cp869',
-      ],
-    }, options);
-
-    this._reset();
+    this._reset(options || {});
   }
 
   /**
      * Reset the state of the object
-     */
-  _reset() {
+     *
+     * @param  {object}   options   Object containing configuration options
+    */
+  _reset(options) {
+    if (options) {
+      this._options = Object.assign({
+        width: null,
+        embedded: false,
+        wordWrap: true,
+        autoFlush: true,
+        codepageMapping: 'star',
+        codepageCandidates: [
+          'cp437', 'cp858', 'cp860', 'cp861', 'cp863', 'cp865',
+          'cp852', 'cp857', 'cp855', 'cp866', 'cp869',
+        ],
+      }, options);
+    }
+
     this._embedded = this._options.width && this._options.embedded;
 
     this._buffer = [];
