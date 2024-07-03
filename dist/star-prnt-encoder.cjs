@@ -39,19 +39,11 @@ class StarPrntEncoder {
      * @param  {object}   options   Object containing configuration options
     */
   constructor(options) {
-    this._reset(options);
-  }
-
-  /**
-     * Reset the state of the object
-     *
-     * @param  {object}   options   Object containing configuration options
-    */
-  _reset(options) {
     this._options = Object.assign({
       width: null,
       embedded: false,
       wordWrap: true,
+      autoFlush: true,
       codepageMapping: 'star',
       codepageCandidates: [
         'cp437', 'cp858', 'cp860', 'cp861', 'cp863', 'cp865',
@@ -59,6 +51,13 @@ class StarPrntEncoder {
       ],
     }, options);
 
+    this._reset();
+  }
+
+  /**
+     * Reset the state of the object
+     */
+  _reset() {
     this._embedded = this._options.width && this._options.embedded;
 
     this._buffer = [];
@@ -1130,6 +1129,18 @@ class StarPrntEncoder {
   }
 
   /**
+     * Force printing the data from the line buffer
+     *
+     * @return {object}          Return the object, for easy chaining commands
+     *
+     */
+  flush() {
+    this._queue([0x1b, 0x1d, 0x50, 0x30, 0x1b, 0x1d, 0x50, 0x31]);
+
+    return this;
+  }
+
+  /**
      * Add raw printer commands
      *
      * @param  {array}           data   raw bytes to be included
@@ -1149,6 +1160,10 @@ class StarPrntEncoder {
      *
      */
   encode() {
+    if (this._options.autoFlush) {
+      this.flush();
+    }
+
     this._flush();
 
     let length = 0;
