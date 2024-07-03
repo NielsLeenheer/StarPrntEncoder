@@ -590,6 +590,29 @@ Add raw printer commands, in case you want to send a command that this library d
         .encode()
         
 
+### Flush
+
+On some printers sending a newline does not automatically print the data in the buffer. It will only print the data when you execute a `cut()` or `pulse()` command. Or if you `initialize()` the printer again. This command forces the printer to print the data in the buffer by turning on page mode and then going back to line mode. 
+
+You do not need to call this command by default, it will be called automatically whenever you `encode()` your commands. However if you turn off `autoFlush` in the configuration options, you can call it manually.
+
+    let encoder = new StarPrntEncoder({
+        autoFlush:  false
+    });
+
+    let result = encoder
+        .line('Print this line')
+        .flush()
+        .encode()
+
+Instead of:
+
+    let encoder = new StarPrntEncoder();
+
+    let result = encoder
+        .line('Print this line')
+        .encode()
+
 ## License
 
 MIT

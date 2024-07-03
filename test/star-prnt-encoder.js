@@ -4,7 +4,9 @@ import { assert, expect } from 'chai';
 
 
 describe('StarPrntEncoder', function() {
-    let encoder = new StarPrntEncoder();
+    let encoder = new StarPrntEncoder({
+        autoFlush: false
+    });
 
     describe('text(hello)', function () {
         let result = encoder.text('hello').encode();
