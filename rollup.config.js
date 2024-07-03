@@ -8,7 +8,7 @@ export default [
 	{
 		input: 'src/star-prnt-encoder.js',
 		output: {
-			name: 'StarPrintEncoder',
+			name: 'StarPrntEncoder',
 			file: 'dist/star-prnt-encoder.umd.js',
 			format: 'umd'
 		},
