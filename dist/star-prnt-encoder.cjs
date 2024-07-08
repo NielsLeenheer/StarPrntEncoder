@@ -30,7 +30,7 @@ const codepageMappings = {
 };
 
 /**
- * Create a byte stream based on commands for ESC/POS printers
+ * Create a byte stream based on commands for StarPRNT or Star Line printers
  */
 class StarPrntEncoder {
   /**
@@ -53,13 +53,33 @@ class StarPrntEncoder {
         width: null,
         embedded: false,
         wordWrap: true,
-        autoFlush: true,
+        language: 'star-prnt',
         codepageMapping: 'star',
         codepageCandidates: [
           'cp437', 'cp858', 'cp860', 'cp861', 'cp863', 'cp865',
           'cp852', 'cp857', 'cp855', 'cp866', 'cp869',
         ],
       }, options);
+
+      /*
+
+        StarPRNT printers are set up to have print start control set to page units.
+        That means the printer will only print after it has received a cut or ff command.
+        This is not ideal, so we set autoFlush to true by default, which will force
+        the printer to print after each encode().
+
+        One problem, we do not want to do this for embedded content. Only the top level
+        encoder should flush the buffer.
+
+        Star Line Mode printers are set up to have print start control set to line units,
+        which means the printer will print after each line feed command. We do not need
+        to flush the buffer for these printers.
+
+      */
+
+      if (typeof this._options.autoFlush === 'undefined') {
+        this._options.autoFlush = ! this._options.embedded && this._options.language == 'star-prnt';
+      }
     }
 
     this._embedded = this._options.width && this._options.embedded;

@@ -1,8 +1,8 @@
 # StarPrntEncoder
 
-Create a set of commands that can be send to any receipt printer that supports StarPRNT
+Create a set of commands that can be send to any receipt printer that supports StarPRNT or Star Line commands
 
-Before you use this library, you should also consider [ThermalPrinterEncoder](https://github.com/NielsLeenheer/ThermalPrinterEncoder), which is based on [EscPosEncoder](https://github.com/NielsLeenheer/EscPosEncoder), but also adds support for the StarPRNT language by using [StarPrntEncoder](https://github.com/NielsLeenheer/StarPrntEncoder). The API of ThermalPrinter is identical to this one and you should just be able to swap it out without any further changes.
+Before you use this library, you should also consider [ThermalPrinterEncoder](https://github.com/NielsLeenheer/ThermalPrinterEncoder), which is based on [EscPosEncoder](https://github.com/NielsLeenheer/EscPosEncoder), but also adds support for the StarPRNT language and Star Line commands by using [StarPrntEncoder](https://github.com/NielsLeenheer/StarPrntEncoder). The API of ThermalPrinter is identical to this one and you should just be able to swap it out without any further changes.
 
 ## Usage
 
@@ -96,6 +96,15 @@ If you want text to automatically word wrap at the edge of the paper you can tur
         wordWrap:   true
     });
 
+## Flush
+
+Print start control for StarPRNT printers is by default configured in page units. This means that instead of automatically printing after each single line, it waits with printing until the next initialization, a form feed, `pulse()` or `cut()` command. Star Line printers are configured in line units, so they do not have this issue. 
+
+The encoder uses the `autoFlush` setting to enable StarPRNT printers to automatically flush the printer buffer after each `encode()` command. This configuration property is automatically enabled on StarPRNT printers, and disabled on Star Line printers. But you can also set this manually to overwrite the automatic behaviour.
+
+    let encoder = new StarPrntEncoder({
+        autoFlush:  false
+    });
 
 
 ## Commands
@@ -592,7 +601,7 @@ Add raw printer commands, in case you want to send a command that this library d
 
 ### Flush
 
-On some printers sending a newline does not automatically print the data in the buffer. It will only print the data when you execute a `cut()` or `pulse()` command. Or if you `initialize()` the printer again. This command forces the printer to print the data in the buffer by turning on page mode and then going back to line mode. 
+On StarPRNT printers configured with page units for print start control, sending a newline does not automatically print the data in the buffer. It will only print the data when you execute a `cut()` or `pulse()` command. Or if you `initialize()` the printer again. This command forces the printer to print the data in the buffer by turning on page mode and then going back to line mode. 
 
 You do not need to call this command by default, it will be called automatically whenever you `encode()` your commands. However if you turn off `autoFlush` in the configuration options, you can call it manually.
 
