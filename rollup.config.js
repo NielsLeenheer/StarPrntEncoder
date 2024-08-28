@@ -10,6 +10,7 @@ export default [
 		output: {
 			name: 'StarPrntEncoder',
 			file: 'dist/star-prnt-encoder.umd.js',
+			sourcemap: true,
 			format: 'umd'
 		},
 		plugins: [
@@ -24,6 +25,7 @@ export default [
 		input: 'src/star-prnt-encoder.js',
 		output: { 
 			file: 'dist/star-prnt-encoder.esm.js', 
+			sourcemap: true,
 			format: 'es' 
 		},
 		plugins: [
