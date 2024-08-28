@@ -4,28 +4,7 @@ import Dither from 'canvas-dither';
 import Flatten from 'canvas-flatten';
 import CodepageEncoder from 'codepage-encoder';
 
-const codepageMappings = {
-  star: {
-    'cp437': 0x01,
-    'cp858': 0x04,
-    'cp852': 0x05,
-    'cp860': 0x06,
-    'cp861': 0x07,
-    'cp863': 0x08,
-    'cp865': 0x09,
-    'cp866': 0x0a,
-    'cp855': 0x0b,
-    'cp857': 0x0c,
-    'cp862': 0x0d,
-    'cp864': 0x0e,
-    'cp737': 0x0f,
-    'cp869': 0x11,
-    'cp874': 0x14,
-    'windows1252': 0x20,
-    'windows1250': 0x21,
-    'windows1251': 0x22,
-  },
-};
+import codepageMappings from '../generated/mapping.js';
 
 /**
  * Create a byte stream based on commands for StarPRNT or Star Line printers
@@ -114,7 +93,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }
@@ -229,7 +210,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }
@@ -273,7 +256,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }

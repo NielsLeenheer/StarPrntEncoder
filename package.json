@@ -15,7 +15,8 @@
   "main": "dist/star-prnt-encoder.cjs",
   "module": "dist/star-prnt-encoder.mjs",
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run generate && rollup -c",
+    "generate": "node tools/generate.js",
     "lint": "eslint --fix src/star-prnt-encoder.js",
     "mocha": "mocha test/",
     "test": "npm run lint && npm run mocha"
@@ -43,6 +44,7 @@
     "chai": "^4.3.7",
     "eslint": "^8.39.0",
     "eslint-config-google": "^0.14.0",
+    "javascript-stringify": "^2.1.0",
     "mocha": "^10.2.0",
     "rollup": "^3.20.7"
   },

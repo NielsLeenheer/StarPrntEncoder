@@ -7,26 +7,7 @@ var Flatten = require('canvas-flatten');
 var CodepageEncoder = require('codepage-encoder');
 
 const codepageMappings = {
-  star: {
-    'cp437': 0x01,
-    'cp858': 0x04,
-    'cp852': 0x05,
-    'cp860': 0x06,
-    'cp861': 0x07,
-    'cp863': 0x08,
-    'cp865': 0x09,
-    'cp866': 0x0a,
-    'cp855': 0x0b,
-    'cp857': 0x0c,
-    'cp862': 0x0d,
-    'cp864': 0x0e,
-    'cp737': 0x0f,
-    'cp869': 0x11,
-    'cp874': 0x14,
-    'windows1252': 0x20,
-    'windows1250': 0x21,
-    'windows1251': 0x22,
-  },
+	'star': ['star/standard','cp437','star/katakana',,'cp858','cp852','cp860','cp861','cp863','cp865','cp866','cp855','cp857','cp862','cp864','cp737','cp851','cp869','star/cp928','cp772','cp774','star/cp874',,,,,,,,,,,'windows1252','windows1250','windows1251',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,'cp3840','cp3841','cp3843','cp3844','cp3845','cp3846','cp3847','cp3848','cp1001','cp771','cp3001','cp3002','cp3011','cp3012','cp3021','cp3041'],
 };
 
 /**
@@ -116,7 +97,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }
@@ -231,7 +214,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }
@@ -275,7 +260,9 @@ class StarPrntEncoder {
     let codepages;
 
     if (typeof this._options.codepageMapping == 'string') {
-      codepages = codepageMappings[this._options.codepageMapping];
+      codepages = Object.fromEntries(codepageMappings[this._options.codepageMapping]
+          .map((v, i) => [v, i])
+          .filter((i) => i));
     } else {
       codepages = this._options.codepageMapping;
     }

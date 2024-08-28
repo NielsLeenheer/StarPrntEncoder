@@ -48,11 +48,11 @@ describe('StarPrntEncoder', function() {
         });
     });
 
-    describe('codepage(cp874).text(กำลังทดสอบ) - thai', function () {
-        let result = encoder.codepage('cp874').text('กำลังทดสอบ').encode();
+    describe('codepage(star/cp874).text(กำลังทดสอบ) - thai', function () {
+        let result = encoder.codepage('star/cp874').text('กำลังทดสอบ').encode();
         
-        it('should be [27, 29, 116, 20, 161, 211, 197, 209, 167, 183, 180, 202, 205, 186]', function () {
-            assert.deepEqual(new Uint8Array([27, 29, 116, 20, 161, 211, 197, 209, 167, 183, 180, 202, 205, 186]), result);
+        it('should be [27, 29, 116, 21, 161, 211, 197, 209, 167, 183, 180, 202, 205, 186]', function () {
+            assert.deepEqual(new Uint8Array([27, 29, 116, 21, 161, 211, 197, 209, 167, 183, 180, 202, 205, 186]), result);
         });
     });
 
