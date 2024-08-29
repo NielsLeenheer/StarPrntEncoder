@@ -41,6 +41,7 @@
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.1",
+    "canvas": "^2.11.2",
     "chai": "^4.3.7",
     "eslint": "^8.39.0",
     "eslint-config-google": "^0.14.0",
@@ -49,11 +50,12 @@
     "rollup": "^3.20.7"
   },
   "dependencies": {
-    "canvas": "^2.11.2",
+    "@canvas/image-data": "^1.0.0",
     "canvas-dither": "^1.0.1",
     "canvas-flatten": "^1.0.1",
     "codepage-encoder": "^2.0.4",
-    "linewrap": "^0.2.1"
+    "linewrap": "^0.2.1",
+    "resize-image-data": "^0.3.1"
   },
   "files": [
     "dist"

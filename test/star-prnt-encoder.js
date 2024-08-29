@@ -5,7 +5,8 @@ import { assert, expect } from 'chai';
 
 describe('StarPrntEncoder', function() {
     let encoder = new StarPrntEncoder({
-        autoFlush: false
+        autoFlush: false,
+        createCanvas
     });
 
     describe('text(hello)', function () {
