@@ -38,7 +38,7 @@ export default [
     // CommonJS (for Node) and ES module (for bundlers) build
     {
 		input: 'src/star-prnt-encoder.js',
-		external: ['canvas', 'canvas-dither', 'canvas-flatten', 'codepage-encoder', 'linewrap'],
+		external: ['@point-of-sale/receipt-printer-encoder'],
 		output: [
 			{ file: 'dist/star-prnt-encoder.cjs', format: 'cjs' },
 			{ file: 'dist/star-prnt-encoder.mjs', format: 'es' }
